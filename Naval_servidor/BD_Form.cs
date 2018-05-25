@@ -25,19 +25,29 @@ namespace Naval_servidor
 
         private void consultar_btn_Click(object sender, EventArgs e)
         {
-            SQLiteConnection conexion = new SQLiteConnection("Data Source = D:/usuarios.sqlite");
+            SQLiteConnection conexion = new SQLiteConnection("Data Source = C:/Users/Fenrir/Documents/GitHub/NavalServidor/usuarios.sqlite");
             conexion.Open();
 
-            string consulta = "select * from Usuarios";
+            string consulta = "select * from Jugadores where nombre = 'test';";
+
             SQLiteCommand comando = new SQLiteCommand(consulta, conexion);
             SQLiteDataReader datos = comando.ExecuteReader();
+
+            textBox1.Text = textBox1.Text + "datos:" + datos.Read() + "\r\n";
 
             while (datos.Read())
             {
                 //string nombre = Convert.ToString(datos[0]);
                 string nombre = datos.GetString(0);
-                textBox1.Text = textBox1.Text + nombre;
-                textBox1.Text = textBox1.Text + "\n";
+                string victorias = Convert.ToString(datos[1]);
+                string derrotas = Convert.ToString(datos[2]);
+                string porc_victorias = Convert.ToString(datos[3]);
+
+                textBox1.Text = textBox1.Text + "Nombre: " + nombre + "\r\n";
+                textBox1.Text = textBox1.Text + "victorias: " + victorias + "\r\n";
+                textBox1.Text = textBox1.Text + "derrotas: " + derrotas + "\r\n";
+                textBox1.Text = textBox1.Text + "% victorias: " + porc_victorias + "\r\n";
+                textBox1.Text = textBox1.Text + "\r\n";
 
             }
             conexion.Close();

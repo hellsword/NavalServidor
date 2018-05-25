@@ -1,0 +1,10 @@
+
+.vs/NavalServidor/v15/.suo
+*.json
+Naval_servidor/.vs/Naval_servidor/v15/.suo
+*.exe
+*.pdb
+Naval_servidor/bin/Debug/Naval_servidor.pdb
+*.cache
+*.CopyComplete
+*.exe

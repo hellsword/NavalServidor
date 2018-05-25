@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
+using System.Data.SQLite﻿;
 
 namespace Naval_servidor
 {
@@ -71,6 +72,19 @@ namespace Naval_servidor
 
                     lock (_lock)
                     {
+
+                        /*
+                        SQLiteConnection conexion = new SQLiteConnection("Data Source = C:/Users/Fenrir/Documents/GitHub/NavalServidor/usuarios.sqlite");
+                        conexion.Open();
+
+                        string consulta = "select nombre from Jugadores where nombre = '"+""+"';";
+
+                        SQLiteCommand comando = new SQLiteCommand(consulta, conexion);
+                        SQLiteDataReader datos = comando.ExecuteReader();
+
+                        textBox1.Text = textBox1.Text + "datos:" + datos.Read() + "\r\n";
+                        */
+
                         Cliente ocliente = new Cliente();
                         ocliente.id = count;
                         ocliente.cliente_TCP = client;
@@ -136,24 +150,18 @@ namespace Naval_servidor
 
             username = Encoding.ASCII.GetString(buffer, 0, byte_count);
             cliente.username = username;
-            Console.WriteLine(username + " conectado!!");
-            textBox1.Text = textBox1.Text + username + " conectado!! \r\n";
 
-            Console.WriteLine("\nLista clientes actuales: ");
+            textBox1.Text = textBox1.Text + username + " conectado!! \r\n";
             textBox1.Text = textBox1.Text + "\nLista clientes actuales: \r\n";
+
             foreach (Cliente c in lista_clientes)
             {
-                Console.WriteLine("id: " + c.id);
-                Console.WriteLine("username: " + c.username);
-                Console.WriteLine("hilo: " + c.hilo);
-                Console.WriteLine("\n");
 
                 textBox1.Text = textBox1.Text + "id: " + c.id + "\r\n";
                 textBox1.Text = textBox1.Text + "username: " + c.username + "\r\n";
                 textBox1.Text = textBox1.Text + "hilo: " + c.hilo + "\r\n";
                 textBox1.Text = textBox1.Text + "\r\n";
             }
-            Console.WriteLine("****************** ");
             textBox1.Text = textBox1.Text + "****************** \r\n";
 
             while (true)
@@ -183,7 +191,6 @@ namespace Naval_servidor
                 envia_a_todos(data, client, cliente.hilo);
 
                 //data = Encoding.ASCII.GetString(buffer, 0, byte_count);
-                Console.WriteLine(data);
                 textBox1.Text = textBox1.Text + data + "\r\n";
             }
 
