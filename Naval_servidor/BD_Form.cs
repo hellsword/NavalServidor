@@ -25,15 +25,15 @@ namespace Naval_servidor
 
         private void consultar_btn_Click(object sender, EventArgs e)
         {
-            SQLiteConnection conexion = new SQLiteConnection("Data Source = C:/Users/Fenrir/Documents/GitHub/NavalServidor/usuarios.sqlite");
+            SQLiteConnection conexion = new SQLiteConnection("Data Source = C:/Users/DarkAsus/Documents/GitHub/NavalServidor/usuarios.sqlite");
             conexion.Open();
 
-            string consulta = "select * from Jugadores where nombre = 'test';";
+            string consulta = "select * from Jugadores;";
 
             SQLiteCommand comando = new SQLiteCommand(consulta, conexion);
             SQLiteDataReader datos = comando.ExecuteReader();
 
-            textBox1.Text = textBox1.Text + "datos:" + datos.Read() + "\r\n";
+            //textBox1.Text = textBox1.Text + "datos:" + datos.Read() + "\r\n";
 
             while (datos.Read())
             {

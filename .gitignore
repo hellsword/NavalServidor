@@ -8,3 +8,11 @@ Naval_servidor/bin/Debug/Naval_servidor.pdb
 *.cache
 *.CopyComplete
 *.exe
+*.nupkg
+*.xdt
+*.transform
+*.ps1
+*.dll
+*.xml
+*.config
+*.targets
