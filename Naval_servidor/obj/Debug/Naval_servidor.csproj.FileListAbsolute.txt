@@ -29,7 +29,6 @@ C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\EntityFr
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\System.Data.SQLite.xml
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\System.Data.SQLite.dll.config
-C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_servidor.csprojResolveAssemblyReference.cache
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_servidor.BD_Form.resources
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_servidor.Form1.resources
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_servidor.Properties.Resources.resources
@@ -38,3 +37,4 @@ C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_se
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_servidor.csproj.CopyComplete
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_servidor.exe
 C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_servidor.pdb
+C:\Users\Fenrir\Documents\GitHub\NavalServidor\Naval_servidor\obj\Debug\Naval_servidor.csprojAssemblyReference.cache

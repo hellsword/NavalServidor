@@ -70,6 +70,7 @@
       <DependentUpon>BD_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Cliente.cs" />
+    <Compile Include="embarcacion.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
