@@ -88,28 +88,20 @@ namespace Naval_servidor
 
                         client = cliente.cliente_TCP;
 
-                        //Recibe mensajes
+                        //Recibe el nombre del usuario que se esta conectando
                         NetworkStream stream = client.GetStream();
                         byte[] buffer = new byte[1024];
                         int byte_count = stream.Read(buffer, 0, buffer.Length);
-
                         username = Encoding.ASCII.GetString(buffer, 0, byte_count);
                         cliente.username = username;
+
+                        chat_text.Text = chat_text.Text + username + "\r\n";
+
 
                         //Se agrega el usuario a la sala de espera
                         lista_jugadores.Rows.Add(cliente.username, "esperando rival...");
                     }
-
-                    
-
-
-                    //t[id_hilo] = new Thread(ingresa_clientes(count));
-                    //t[id_hilo].Start(count);
-
-
                     count++;
-
-
                     pares++;
 
                     if (pares == 2)
@@ -275,8 +267,6 @@ namespace Naval_servidor
                 }
 
                 envia_a_todos(data, client, cliente.hilo);
-
-                //data = Encoding.ASCII.GetString(buffer, 0, byte_count);
                 chat_text.Text = chat_text.Text + data + "\r\n";
             }
         }
