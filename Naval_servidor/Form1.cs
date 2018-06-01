@@ -60,58 +60,54 @@ namespace Naval_servidor
 
             Console.WriteLine("Se ha abierto un nuevo canal de conexión: " + id_hilo);
 
+            
+            //this.Show();
 
-            while (true)
+            if (id_hilo >= CONEX)
             {
-                //this.Show();
+                Console.WriteLine("Ha alcanzado el máximo de conexiones");
+            }
+            else
+            {
+                //ver identificacion TcpClient
+                client = ServerSocket.AcceptTcpClient();
 
-                if (id_hilo >= CONEX)
+                lock (_lock)
                 {
-                    Console.WriteLine("Ha alcanzado el máximo de conexiones");
+                    Cliente cliente = new Cliente();
+                    cliente.id = count;
+                    cliente.cliente_TCP = client;
+                    //cliente.hilo = id_hilo;
+                    lista_clientes.Add(cliente);
+
+                    //////////////////////
+
+                    lista_espera.Add(count);
+
+                    client = cliente.cliente_TCP;
+
+                    //Recibe el nombre del usuario que se esta conectando
+                    NetworkStream stream = client.GetStream();
+                    byte[] buffer = new byte[1024];
+                    int byte_count = stream.Read(buffer, 0, buffer.Length);
+                    username = Encoding.ASCII.GetString(buffer, 0, byte_count);
+                    cliente.username = username;
+
+                    chat_text.Text = chat_text.Text + username + "\r\n";
+
+                    //Se agrega el usuario a la sala de espera
+                    lista_jugadores.Rows.Add(cliente.username, "esperando rival...");
                 }
-                else
+                count++;
+                pares++;
+
+                if (pares == 2)
                 {
-                    //ver identificacion TcpClient
-                    client = ServerSocket.AcceptTcpClient();
-
-                    lock (_lock)
-                    {
-                        Cliente cliente = new Cliente();
-                        cliente.id = count;
-                        cliente.cliente_TCP = client;
-                        //cliente.hilo = id_hilo;
-                        lista_clientes.Add(cliente);
-
-                        //////////////////////
-
-                        lista_espera.Add(count);
-
-                        client = cliente.cliente_TCP;
-
-                        //Recibe el nombre del usuario que se esta conectando
-                        NetworkStream stream = client.GetStream();
-                        byte[] buffer = new byte[1024];
-                        int byte_count = stream.Read(buffer, 0, buffer.Length);
-                        username = Encoding.ASCII.GetString(buffer, 0, byte_count);
-                        cliente.username = username;
-
-                        chat_text.Text = chat_text.Text + username + "\r\n";
-
-
-                        //Se agrega el usuario a la sala de espera
-                        lista_jugadores.Rows.Add(cliente.username, "esperando rival...");
-                    }
-                    count++;
-                    pares++;
-
-                    if (pares == 2)
-                    {
-                        pares = 0;
-                        id_hilo++;
-                        //Console.WriteLine("Se ha abierto un nuevo canal de conexión: " + id_hilo);
-                    }
-
+                    pares = 0;
+                    id_hilo++;
+                    //Console.WriteLine("Se ha abierto un nuevo canal de conexión: " + id_hilo);
                 }
+
             }
 
         }
@@ -139,50 +135,6 @@ namespace Naval_servidor
             }
         }
 
-
-        //Se reciben los mensajes 
-        /*
-        public void ingresa_clientes(object o)
-        {
-            CheckForIllegalCrossThreadCalls = false;
-
-            int id = (int)o;
-            lista_espera.Add(id);
-            cliente = lista_clientes.FirstOrDefault(x => x.id == id);
-
-            lock (_lock) client = cliente.cliente_TCP;
-
-            //Recibe mensajes
-            NetworkStream stream = client.GetStream();
-            byte[] buffer = new byte[1024];
-            int byte_count = stream.Read(buffer, 0, buffer.Length);
-
-            username = Encoding.ASCII.GetString(buffer, 0, byte_count);
-            cliente.username = username;
-
-            //Se agrega el usuario a la sala de espera
-            lista_jugadores.Rows.Add(cliente.username, "esperando rival...");
-
-
-            //AQUI VA LA FUNCION BLA BLA BLA, esta deber ir al apretar el boton para armar parejas
-            //Controlador_clientes(id);
-
-
-            //Recibe datos estadisticos del jugador que sale del juego
-            
-            stream = client.GetStream();
-            buffer = new byte[1024];
-            byte_count = stream.Read(buffer, 0, buffer.Length);
-
-            string datos_estadisticos = Encoding.ASCII.GetString(buffer, 0, byte_count);
-            chat_text.Text = chat_text.Text + datos_estadisticos + "\r\n";
-            
-
-            lock (_lock) lista_clientes.RemoveAll(x => x.id == id);
-            client.Client.Shutdown(SocketShutdown.Both);
-            client.Close();
-        }
-        */
 
         public void Controlador_clientes(object o)
         {
@@ -266,7 +218,7 @@ namespace Naval_servidor
                     data = reconstruir_datos(data);
                 }
 
-                envia_a_todos(data, client, cliente.hilo);
+                //envia_a_todos(data, client, cliente.hilo);
                 chat_text.Text = chat_text.Text + data + "\r\n";
             }
         }
@@ -394,13 +346,8 @@ namespace Naval_servidor
                     r2 = -1;
                     id_hilo++;
                 }
-                
-                
-
             }
-
-
-
+            
         }
     }
 
