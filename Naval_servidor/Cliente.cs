@@ -17,5 +17,6 @@ namespace Naval_servidor
         public string victorias { get; set; }
         public string derrotas { get; set; }
         public string porc_victorias { get; set; }
+        public string estado { get; set; }
     }
 }

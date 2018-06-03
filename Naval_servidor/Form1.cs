@@ -60,78 +60,78 @@ namespace Naval_servidor
 
             Console.WriteLine("Se ha abierto un nuevo canal de conexión: " + id_hilo);
 
-            
+
             //this.Show();
 
-            if (id_hilo >= CONEX)
+            while (true)
             {
-                Console.WriteLine("Ha alcanzado el máximo de conexiones");
-            }
-            else
-            {
-                //ver identificacion TcpClient
-                client = ServerSocket.AcceptTcpClient();
 
-                lock (_lock)
+                if (id_hilo >= CONEX)
                 {
-                    Cliente cliente = new Cliente();
-                    cliente.id = count;
-                    cliente.cliente_TCP = client;
-                    //cliente.hilo = id_hilo;
-                    lista_clientes.Add(cliente);
-
-                    //////////////////////
-
-                    lista_espera.Add(count);
-
-                    client = cliente.cliente_TCP;
-
-                    //Recibe el nombre del usuario que se esta conectando
-                    NetworkStream stream = client.GetStream();
-                    byte[] buffer = new byte[1024];
-                    int byte_count = stream.Read(buffer, 0, buffer.Length);
-                    username = Encoding.ASCII.GetString(buffer, 0, byte_count);
-                    cliente.username = username;
-
-                    chat_text.Text = chat_text.Text + username + "\r\n";
-
-                    //Se agrega el usuario a la sala de espera
-                    lista_jugadores.Rows.Add(cliente.username, "esperando rival...");
+                    Console.WriteLine("Ha alcanzado el máximo de conexiones");
                 }
-                count++;
-                pares++;
-
-                if (pares == 2)
+                else
                 {
-                    pares = 0;
-                    id_hilo++;
-                    //Console.WriteLine("Se ha abierto un nuevo canal de conexión: " + id_hilo);
-                }
+                    //ver identificacion TcpClient
+                    client = ServerSocket.AcceptTcpClient();
 
+                    lock (_lock)
+                    {
+                        Cliente cliente = new Cliente();
+                        cliente.id = count;
+                        cliente.cliente_TCP = client;
+                        cliente.estado = "esperando";
+                        //cliente.hilo = id_hilo;
+                        lista_clientes.Add(cliente);
+
+                        //////////////////////
+
+                        lista_espera.Add(count);
+
+                        client = cliente.cliente_TCP;
+
+                        //Recibe el nombre del usuario que se esta conectando
+                        NetworkStream stream = client.GetStream();
+                        byte[] buffer = new byte[1024];
+                        int byte_count = stream.Read(buffer, 0, buffer.Length);
+                        username = Encoding.ASCII.GetString(buffer, 0, byte_count);
+                        cliente.username = username;
+
+                        chat_text.Text = chat_text.Text + username + "\r\n";
+
+                        //Se agrega el usuario a la sala de espera
+                        lista_jugadores.Rows.Add(cliente.username, "esperando rival...");
+                    }
+                    count++;
+                    pares++;
+
+                    if (pares == 2)
+                    {
+                        pares = 0;
+                        id_hilo++;
+                        //Console.WriteLine("Se ha abierto un nuevo canal de conexión: " + id_hilo);
+                    }
+
+                }
             }
 
         }
 
 
-        //Envia el mensaje de un cliente a todos los demas que esten conectados
-        static void envia_a_todos(string data, TcpClient cliente_actual, int hilo)
+        //Envia el mensaje de un cliente a su rival
+        static void envia_a_rival(string data, Cliente cliente_actual)
         {
             byte[] buffer = Encoding.ASCII.GetBytes(data + Environment.NewLine);
 
             //Bloquea una seccion critica
             lock (_lock)
             {
-                foreach (Cliente c in lista_clientes)
-                {
-                    //Comprueba que no se envie el mensaje al cliente que lo generó
-                    if (cliente_actual != c.cliente_TCP && c.hilo == hilo)
-                    {
-                        NetworkStream stream = c.cliente_TCP.GetStream();
+                //Busca al rival para enviarle el mensaje
+                Cliente rival = lista_clientes.FirstOrDefault(x => x.cliente_TCP != cliente_actual.cliente_TCP && x.hilo == cliente_actual.hilo);
+                
+                NetworkStream stream = rival.cliente_TCP.GetStream();
+                stream.Write(buffer, 0, buffer.Length);
 
-                        stream.Write(buffer, 0, buffer.Length);
-                    }
-
-                }
             }
         }
 
@@ -209,17 +209,36 @@ namespace Naval_servidor
                 string data = Encoding.ASCII.GetString(buffer, 0, byte_count);
 
                 string[] datos = data.Split(':');
-                if (datos[0] == "mensaje")
+
+                if(datos[0] == "config")
                 {
-                    data = reconstruir_datos(data);
+                    envia_a_rival(data, cliente);
+
+                    cliente.estado = "listo";
+                    Cliente rival = lista_clientes.FirstOrDefault(x => x.cliente_TCP != cliente.cliente_TCP && x.hilo == cliente.hilo);
+
+                    if(cliente.estado == "listo" && rival.estado == "listo")
+                    {
+                        envia_a_rival("ready:", cliente);
+                        envia_a_rival("ready:", rival);
+                    }
                 }
-                else if (datos[0] == "mov")
+                else
                 {
-                    data = reconstruir_datos(data);
+                    if (datos[0] == "mensaje")
+                    {
+                        data = reconstruir_datos(data);
+                    }
+                    else if (datos[0] == "mov")
+                    {
+                        data = reconstruir_datos(data);
+                    }
+
+                    envia_a_rival(data, cliente);
                 }
 
-                //envia_a_todos(data, client, cliente.hilo);
                 chat_text.Text = chat_text.Text + data + "\r\n";
+
             }
         }
 
