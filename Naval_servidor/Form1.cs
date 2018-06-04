@@ -151,6 +151,7 @@ namespace Naval_servidor
 
             lock (_lock)
             {
+                /*
                 SQLiteConnection conexion = new SQLiteConnection("Data Source = C:/Users/DarkAsus/Documents/GitHub/NavalServidor/usuarios.sqlite");
                 conexion.Open();
 
@@ -171,11 +172,12 @@ namespace Naval_servidor
                 }
                 else
                 {
+                */
                     //Sino inicializa todo en cero
                     cliente.victorias = "0";
                     cliente.derrotas = "0";
                     cliente.porc_victorias = "0";
-                }
+               // }
             }
 
 
