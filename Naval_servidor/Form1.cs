@@ -221,21 +221,23 @@ namespace Naval_servidor
 
                     if(cliente.estado == "listo" && rival.estado == "listo")
                     {
-                        envia_a_rival("ready:", cliente);
-                        envia_a_rival("ready:", rival);
+                        int aleatorio = rnd.Next(0, 1);
+
+                        if(aleatorio == 0)
+                        {
+                            envia_a_rival("ready:true", cliente);
+                            envia_a_rival("ready:false", rival);
+                        }
+                        else
+                        {
+                            envia_a_rival("ready:false", cliente);
+                            envia_a_rival("ready:true", rival);
+                        }
+
                     }
                 }
                 else
                 {
-                    if (datos[0] == "mensaje")
-                    {
-                        data = reconstruir_datos(data);
-                    }
-                    else if (datos[0] == "mov")
-                    {
-                        data = reconstruir_datos(data);
-                    }
-
                     envia_a_rival(data, cliente);
                 }
 
