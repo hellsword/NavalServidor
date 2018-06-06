@@ -218,12 +218,12 @@ namespace Naval_servidor
 
                     cliente.estado = "listo";
                     Cliente rival = lista_clientes.FirstOrDefault(x => x.cliente_TCP != cliente.cliente_TCP && x.hilo == cliente.hilo);
-
-                    if(cliente.estado == "listo" && rival.estado == "listo")
+                    
+                    if (cliente.estado == "listo" && rival.estado == "listo")
                     {
                         int aleatorio = rnd.Next(0, 1);
 
-                        if(aleatorio == 0)
+                        if (aleatorio == 0)
                         {
                             envia_a_rival("ready:true", cliente);
                             envia_a_rival("ready:false", rival);
@@ -235,6 +235,7 @@ namespace Naval_servidor
                         }
 
                     }
+                    
                 }
                 else
                 {
