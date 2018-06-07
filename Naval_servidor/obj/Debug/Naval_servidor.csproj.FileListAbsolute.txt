@@ -44,8 +44,6 @@ C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\Naval_
 C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\EntityFramework.dll
 C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\System.Data.SQLite.dll
-C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\System.Data.SQLite.EF6.dll
-C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\System.Data.SQLite.Linq.dll
 C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\EntityFramework.xml
 C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\DarkAsus\Documents\GitHub\NavalServidor\Naval_servidor\bin\Debug\System.Data.SQLite.xml

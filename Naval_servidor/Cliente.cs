@@ -14,9 +14,9 @@ namespace Naval_servidor
         public TcpClient cliente_TCP { get; set; }
         public int hilo { get; set; }
         public string username { get; set; }
-        public string victorias { get; set; }
-        public string derrotas { get; set; }
-        public string porc_victorias { get; set; }
+        public int victorias { get; set; }
+        public int derrotas { get; set; }
+        public int porc_victorias { get; set; }
         public string estado { get; set; }
     }
 }

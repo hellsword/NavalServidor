@@ -151,7 +151,7 @@ namespace Naval_servidor
 
             lock (_lock)
             {
-                /*
+                
                 SQLiteConnection conexion = new SQLiteConnection("Data Source = C:/Users/DarkAsus/Documents/GitHub/NavalServidor/usuarios.sqlite");
                 conexion.Open();
 
@@ -166,18 +166,18 @@ namespace Naval_servidor
                 if (datos.Read())
                 {
                     //Si el usuario existe en la BD, obtiene los datos
-                    cliente.victorias = Convert.ToString(datos[1]);
-                    cliente.derrotas = Convert.ToString(datos[2]);
-                    cliente.porc_victorias = Convert.ToString(datos[3]);
+                    cliente.victorias = Convert.ToInt32(datos[1]);
+                    cliente.derrotas = Convert.ToInt32(datos[2]);
+                    cliente.porc_victorias = Convert.ToInt32(datos[3]);
                 }
                 else
                 {
-                */
+               
                     //Sino inicializa todo en cero
-                    cliente.victorias = "0";
-                    cliente.derrotas = "0";
-                    cliente.porc_victorias = "0";
-               // }
+                    cliente.victorias = 0;
+                    cliente.derrotas = 0;
+                    cliente.porc_victorias = 0;
+                }
             }
 
 
@@ -208,8 +208,41 @@ namespace Naval_servidor
                     break;
                 }
 
-                string data = Encoding.ASCII.GetString(buffer, 0, byte_count);
+                Cliente rival = lista_clientes.FirstOrDefault(x => x.cliente_TCP != cliente.cliente_TCP && x.hilo == cliente.hilo);
 
+                lock (_lock)
+                {
+
+                    SQLiteConnection conexion = new SQLiteConnection("Data Source = C:/Users/DarkAsus/Documents/GitHub/NavalServidor/usuarios.sqlite");
+                    conexion.Open();
+
+                    string consulta = "select * from Jugadores where nombre = '" + rival.username + "';";
+
+                    SQLiteCommand comando = new SQLiteCommand(consulta, conexion);
+                    SQLiteDataReader datos_consulta = comando.ExecuteReader();
+
+                    //chat_text.Text = chat_text.Text + username + " conectado!! \r\n";
+                    //chat_text.Text = chat_text.Text + "\nLista clientes actuales: \r\n";
+
+                    if (datos_consulta.Read())
+                    {
+                        //Si el usuario existe en la BD, obtiene los datos
+                        rival.victorias = Convert.ToInt32(datos_consulta[1]);
+                        rival.derrotas = Convert.ToInt32(datos_consulta[2]);
+                        rival.porc_victorias = Convert.ToInt32(datos_consulta[3]);
+                    }
+                    else
+                    {
+
+                        //Sino inicializa todo en cero
+                        rival.victorias = 0;
+                        rival.derrotas = 0;
+                        rival.porc_victorias = 0;
+                    }
+                }
+
+
+                string data = Encoding.ASCII.GetString(buffer, 0, byte_count);
                 string[] datos = data.Split(':');
 
                 if(datos[0] == "config")
@@ -217,7 +250,6 @@ namespace Naval_servidor
                     envia_a_rival(data, cliente);
 
                     cliente.estado = "listo";
-                    Cliente rival = lista_clientes.FirstOrDefault(x => x.cliente_TCP != cliente.cliente_TCP && x.hilo == cliente.hilo);
                     
                     if (cliente.estado == "listo" && rival.estado == "listo")
                     {
@@ -236,6 +268,15 @@ namespace Naval_servidor
 
                     }
                     
+                }
+                else if (datos[0] == "victoria")
+                {
+                    cliente.victorias++;
+                    cliente.derrotas++;
+                    cliente.porc_victorias++;
+
+                    envia_a_rival("victoria:si,"+ cliente.victorias+","+ cliente.derrotas+","+ cliente.porc_victorias, cliente);
+                    envia_a_rival("victoria:no," + rival.victorias + "," + rival.derrotas + "," + rival.porc_victorias, rival);
                 }
                 else
                 {
